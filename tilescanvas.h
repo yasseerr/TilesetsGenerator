@@ -45,6 +45,11 @@ private:
     QStringList m_maskes;
     int m_cellSize;
     int m_gridWidth;
+
+    //to work with
+    QMap<QString,QPixmap*> spritesPix;
+    QMap<QString,QPixmap*> maskesPix;
+    QMap<QString,QList<QPixmap*>*> maskPerPix;
 };
 
 

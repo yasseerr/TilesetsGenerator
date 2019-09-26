@@ -10,6 +10,36 @@ Tilescanvas::Tilescanvas()
 
 void Tilescanvas::generateTiles()
 {
+    //loading images
+    spritesPix.clear();
+    maskPerPix.clear();
+    foreach (auto spriteName, sprites()) {
+        spritesPix.insert(spriteName,new QPixmap(QPixmap("sprites/"+spriteName).scaled(cellSize(),cellSize())));
+        maskPerPix.insert(spriteName,new QList<QPixmap*>());
+    }
+    maskesPix.clear();
+    foreach (auto maskName, maskes()) {
+        maskesPix.insert(maskName,new QPixmap(QPixmap("masks/"+maskName).scaled(cellSize(),cellSize())));
+    }
+    //loading generated masks for each image
+    foreach (QString s, sprites()) {
+        foreach (QString m, maskes()) {
+            QPixmap *originalPix = spritesPix.value(s);
+            QPixmap *mask1 = new QPixmap(*originalPix);
+            QPixmap *mask2 = new QPixmap(*originalPix);
+            QPixmap *mask3 = new QPixmap(*originalPix);
+            QPixmap *mask4 = new QPixmap(*originalPix);
+
+            mask1->setMask(maskesPix.value(m)->transformed(QTransform().rotate(-90)).mask());
+            mask2->setMask(maskesPix.value(m)->transformed(QTransform().rotate(180)).mask());
+            mask3->setMask(maskesPix.value(m)->transformed(QTransform().rotate(0)).mask());
+            mask4->setMask(maskesPix.value(m)->transformed(QTransform().rotate(90)).mask());
+
+            *maskPerPix.value(s) << mask1 << mask2 <<mask3 << mask4;
+
+        }
+    }
+
 
     qDebug() << "loggin";
     qDebug() << sprites();
@@ -32,12 +62,35 @@ void Tilescanvas::saveToImage()
 
 void Tilescanvas::paint(QPainter *painter)
 {   
+    int icursor = 0;
+    int sCount = 0;
+    bool first = true;
     foreach (QString s, sprites()) {
-        for (int i = 0; i < gridWidth(); ++i) {
-            for (int j = 0; j < gridWidth(); ++j) {
-                painter->drawImage(j*cellSize(),i*cellSize(),QImage("sprites/"+s).scaled(cellSize(),cellSize()));
+        foreach (QString s2, sprites()) {
+            if(s==s2)continue;
+            int j=0;
+            foreach (QString m, maskes()) {
+
+                painter->drawPixmap(0,0,*spritesPix.value(s));
+                painter->drawPixmap(0,m_cellSize,*spritesPix.value(s));
+                painter->drawPixmap(m_cellSize,0,*spritesPix.value(s));
+                painter->drawPixmap(m_cellSize,m_cellSize,*spritesPix.value(s));
+
+                painter->drawPixmap(0,0,*maskPerPix.value(s2)->at(j));
+                painter->drawPixmap(0,m_cellSize,*maskPerPix.value(s2)->at(j+1));
+                painter->drawPixmap(m_cellSize,0,*maskPerPix.value(s2)->at(j+2));
+                painter->drawPixmap(m_cellSize,m_cellSize,*maskPerPix.value(s2)->at(j+3));
+
+                painter->translate(cellSize()*2,0);
+                icursor+=2;
+                if(icursor>=gridWidth()){
+                    painter->translate(-cellSize() * (icursor),m_cellSize*2);
+                    icursor = 0;
+                }
+                j+= 4;
             }
         }
+        sCount++;
     }   
 }
 
