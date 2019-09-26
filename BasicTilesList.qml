@@ -44,9 +44,11 @@ ListView {
             }
         }
         Rectangle{
+            color: "#00000000"
+            border.color: "#dfe5720e"
+            border.width: 6
             visible: parent.selected
             anchors.fill: parent
-            color: "#F5DDDD"
         }
     }
     model:FolderListModel{

@@ -70,6 +70,7 @@ ApplicationWindow{
         {
             id:actionMenu
             height: 70
+            clip: true
             spacing: 3
             anchors.left: parent.left
             anchors.leftMargin: 5
@@ -83,6 +84,9 @@ ApplicationWindow{
                 text: qsTr("generate from \n selected sprites \n selected masks")
                 onClicked: {
                     tilesCanvas.sprites = basicTilesList.selectedSprites
+                    tilesCanvas.maskes = masksList.selectedMasks
+                    tilesCanvas.cellSize = cellspinBox.value
+                    tilesCanvas.gridWidth = widthspinBox.value
                     tilesCanvas.generateTiles()
                 }
             }
@@ -106,7 +110,7 @@ ApplicationWindow{
             }
 
             SpinBox {
-                id: spinBox
+                id: widthspinBox
                 height: generateall.height
                 value: 10
                 to: 9000
@@ -124,7 +128,7 @@ ApplicationWindow{
             }
 
             SpinBox {
-                id: spinBox1
+                id: cellspinBox
                 height: generateall.height
                 value: 40
                 to: 9000
@@ -135,9 +139,9 @@ ApplicationWindow{
 
 
         }
-
-        Tilescanvas{
-            id: tilesCanvas
+        Flickable{
+            id: tilesFlickable
+            clip: true
             anchors.right: basicTilesList.left
             anchors.rightMargin: 5
             anchors.left: parent.left
@@ -146,22 +150,33 @@ ApplicationWindow{
             anchors.bottomMargin: 5
             anchors.top: actionMenu.bottom
             anchors.topMargin: 5
-            Rectangle {
-                id: rectangle
-                color: "#00000000"
-                border.width: 2
-                anchors.fill: parent
+
+            contentWidth: tilesCanvas.width
+            contentHeight: tilesCanvas.height
+
+            Tilescanvas{
+                id: tilesCanvas
+                width: cellspinBox.value * widthspinBox.value
+                height: width
             }
+        }
+        Rectangle {
+            id: rectangle
+            color: "#00000000"
+            border.width: 2
+            anchors.fill: tilesFlickable
         }
 
         BasicTilesList {
             id: basicTilesList
+            clip: true
             anchors.bottom: parent.bottom
             anchors.bottomMargin: 0
         }
 
         MasksList {
             id: masksList
+            clip: true
         }
     }
 
@@ -171,7 +186,6 @@ ApplicationWindow{
 
 /*##^##
 Designer {
-    D{i:25;anchors_height:200;anchors_width:200}D{i:27;anchors_height:160;anchors_width:110;anchors_x:0;anchors_y:0}
-D{i:15;anchors_height:200;anchors_width:200}
+    D{i:15;anchors_height:200;anchors_width:200}
 }
 ##^##*/
