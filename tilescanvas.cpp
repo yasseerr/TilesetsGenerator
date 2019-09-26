@@ -44,6 +44,9 @@ void Tilescanvas::generateTiles()
     qDebug() << "loggin";
     qDebug() << sprites();
     qDebug() << maskes();
+    int cellNumbers = m_sprites.count()*(m_sprites.count()-1)*m_maskes.count()*4;
+    gridHeight = (cellNumbers*cellSize())/m_gridWidth+(2+(1+sprites().count()/gridWidth()))*cellSize();
+    emit  updateGridHeight(gridHeight);
     update();
 }
 
@@ -51,11 +54,10 @@ void Tilescanvas::saveToImage()
 {
     QPixmap mask("masks/mask1.png");
     qDebug()<< "saving";
-    desPix = new QPixmap(300,300);
+    desPix = new QPixmap(cellSize()*gridWidth(),gridHeight);
     QPainter *painter = new QPainter(desPix);
     paint(painter);
     painter->end();
-    desPix->setMask(mask.scaled(300,300).mask());
     desPix->save("out.png");
 
 }
@@ -64,7 +66,12 @@ void Tilescanvas::paint(QPainter *painter)
 {   
     int icursor = 0;
     int sCount = 0;
-    bool first = true;
+    int firstI = 0;
+    foreach (QString s, sprites()) {
+        painter->drawPixmap((firstI%gridWidth())*cellSize(),(firstI/gridWidth())*cellSize(),*spritesPix.value(s));
+        firstI++;
+    }
+    painter->translate(0,(1+firstI/gridWidth())*cellSize());
     foreach (QString s, sprites()) {
         foreach (QString s2, sprites()) {
             if(s==s2)continue;

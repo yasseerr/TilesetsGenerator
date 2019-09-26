@@ -38,6 +38,8 @@ signals:
     void maskesChanged(QStringList maskes);
     void cellSizeChanged(int cellSize);
     void gridWidthChanged(int gridWidth);
+    void updateGridHeight(int h);
+
 
 private:
     QStringList m_sprites;
@@ -47,6 +49,7 @@ private:
     int m_gridWidth;
 
     //to work with
+    int gridHeight;
     QMap<QString,QPixmap*> spritesPix;
     QMap<QString,QPixmap*> maskesPix;
     QMap<QString,QList<QPixmap*>*> maskPerPix;

@@ -157,7 +157,11 @@ ApplicationWindow{
             Tilescanvas{
                 id: tilesCanvas
                 width: cellspinBox.value * widthspinBox.value
-                height: width
+                height: 0
+                onUpdateGridHeight: {
+                    height = h;
+                    console.log(h);
+                }
             }
         }
         Rectangle {
