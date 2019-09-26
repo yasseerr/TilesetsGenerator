@@ -9,10 +9,13 @@ class Tilescanvas : public QQuickPaintedItem
 {
     Q_OBJECT
     Q_PROPERTY(QStringList sprites READ sprites WRITE setSprites NOTIFY spritesChanged)
+    Q_PROPERTY(QStringList maskes READ sprites WRITE setSprites NOTIFY spritesChanged)
 public:
     Tilescanvas();
     Q_INVOKABLE
     void generateTiles();
+    Q_INVOKABLE
+    void saveToImage();
 
 public:
     virtual void paint(QPainter *painter) override;
@@ -23,6 +26,8 @@ signals:
     void spritesChanged(QStringList sprites);
 private:
     QStringList m_sprites;
+    QPixmap *desPix;
+    QStringList m_maskes;
 };
 
 

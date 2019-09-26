@@ -2,6 +2,7 @@ import QtQuick 2.13
 import QtQuick.Window 2.13
 import QtQuick.Controls 2.13
 import QtQuick.Layouts 1.3
+import Qt.labs.folderlistmodel 2.12
 import Tiles 1.0
 
 ApplicationWindow{
@@ -32,6 +33,9 @@ ApplicationWindow{
                 id:saveTileset
                 shortcut: StandardKey.Save
                 text: qsTr("&Save")
+                onTriggered: {
+                    tilesCanvas.saveToImage()
+                }
 
             }
             Action {
@@ -156,54 +160,8 @@ ApplicationWindow{
             anchors.bottomMargin: 0
         }
 
-        ListView {
+        MasksList {
             id: masksList
-            y: 0
-            height: parent.width *0.1
-            orientation: ListView.Horizontal
-            flickableDirection: Flickable.HorizontalFlick
-            anchors.right: basicTilesList.left
-            anchors.rightMargin: 0
-            anchors.left: parent.left
-            anchors.leftMargin: 0
-            anchors.bottom: parent.bottom
-            anchors.bottomMargin: 0
-            delegate: Item {
-                width: height
-                height: parent.height
-                Rectangle {
-                    anchors.fill: parent
-                    anchors.margins: 2
-                    color: colorCode
-                }
-
-                Text {
-                    text: name
-                    font.bold: true
-                    anchors.centerIn: parent
-                }
-            }
-            model: ListModel {
-                ListElement {
-                    name: "Grey"
-                    colorCode: "grey"
-                }
-
-                ListElement {
-                    name: "Red"
-                    colorCode: "red"
-                }
-
-                ListElement {
-                    name: "Blue"
-                    colorCode: "blue"
-                }
-
-                ListElement {
-                    name: "Green"
-                    colorCode: "green"
-                }
-            }
         }
     }
 

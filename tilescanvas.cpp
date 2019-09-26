@@ -1,6 +1,7 @@
 #include "tilescanvas.h"
 #include "qdebug.h"
 
+#include <QBitmap>
 #include <QPainter>
 Tilescanvas::Tilescanvas()
 {
@@ -17,16 +18,21 @@ void Tilescanvas::generateTiles()
 
 void Tilescanvas::saveToImage()
 {
-    QImage desImage("out.png","png");
-    QPainter *painter = new QPainter(&desImage);
+    QPixmap mask("masks/mask1.png");
+    qDebug()<< "saving";
+    desPix = new QPixmap(300,300);
+    QPainter *painter = new QPainter(desPix);
     paint(painter);
-    painter->save();
+    painter->end();
+    desPix->setMask(mask.scaled(300,300).mask());
+    desPix->save("out.png");
+
 }
 
 void Tilescanvas::paint(QPainter *painter)
 {   
     foreach (QString s, sprites()) {
-        //painter->drawImage(0,0,QImage("sprites/"+s));
+        painter->drawImage(0,0,QImage("sprites/"+s));
     }   
 }
 

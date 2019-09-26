@@ -2,5 +2,6 @@
     <qresource prefix="/">
         <file>main.qml</file>
         <file>BasicTilesList.qml</file>
+        <file>MasksList.qml</file>
     </qresource>
 </RCC>
