@@ -43,16 +43,16 @@ signals:
 
 private:
     QStringList m_sprites;
-    QPixmap *desPix;
+    QImage *desPix;
     QStringList m_maskes;
     int m_cellSize;
     int m_gridWidth;
 
     //to work with
     int gridHeight;
-    QMap<QString,QPixmap*> spritesPix;
-    QMap<QString,QPixmap*> maskesPix;
-    QMap<QString,QList<QPixmap*>*> maskPerPix;
+    QMap<QString,QImage*> spritesPix;
+    QMap<QString,QImage*> maskesPix;
+    QMap<QString,QList<QImage*>*> maskPerPix;
 };
 
 
